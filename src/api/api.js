@@ -61,8 +61,8 @@ const addDict = (params)=>postAction("/sys/dict/add",params);
 const editDict = (params)=>putAction("/sys/dict/edit",params);
 //const getDictList = (params)=>getAction("/sys/dict/list",params);
 const treeList = (params)=>getAction("/sys/dict/treeList",params);
-// const delDict = (params)=>deleteAction("/sys/dict/delete",params);
-//const getDictItemList = (params)=>getAction("/sys/dictItem/list",params);
+const delDict = (params)=>deleteAction("/sys/dict/delete",params);
+const getDictItemList = (params)=>getAction("/sys/dictItem/list",params);
 const addDictItem = (params)=>postAction("/sys/dictItem/add",params);
 const editDictItem = (params)=>putAction("/sys/dictItem/edit",params);
 //const delDictItem = (params)=>deleteAction("/sys/dictItem/delete",params);
@@ -86,6 +86,10 @@ const queryUserByDepId = (params)=>getAction("/sys/user/queryUserByDepId",params
 const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params);
 // 重复校验
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
+
+//轮播图
+const addCarousel = (params)=>postAction("/carousel/carousel/add",params);
+const aditCarousel = (params)=>putAction("/carousel/carousel/edit",params);
 
 export {
   // imgView,
@@ -130,7 +134,11 @@ export {
   queryUserByDepId,
   queryUserRoleMap,
   duplicateCheck,
-  queryTreeListForRole
+  queryTreeListForRole,
+  delDict,
+  getDictItemList,
+  addCarousel,
+  aditCarousel
 }
 
 
