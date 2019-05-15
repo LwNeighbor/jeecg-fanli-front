@@ -13,6 +13,9 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="投资金额">
           <a-input placeholder="请输入投资金额" v-decorator="['projectMoney', {}]"/>
         </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="购买权限">
+          <a-input placeholder="请输入购买权限" v-decorator="['permission', {}]"/>
+        </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="每天返利">
           <a-input placeholder="请输入每天返利" v-decorator="['dayProfit', {}]"/>
         </a-form-item>

@@ -5,32 +5,10 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="充值金额">
-              <a-input placeholder="请输入充值金额" v-model="queryParam.rechargeMoney"></a-input>
+            <a-form-item label="请输入手机号">
+              <a-input placeholder="请输入手机号" v-model="queryParam.phone"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
-            <a-form-item label="充值状态">
-              <a-input placeholder="请输入充值状态" v-model="queryParam.rechargeStatus"></a-input>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="充值时间">
-                <a-input placeholder="请输入充值时间" v-model="queryParam.rechargeTime"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="充值方式">
-                <a-input placeholder="请输入充值方式" v-model="queryParam.rechargeType"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="用户id">
-                <a-input placeholder="请输入用户id" v-model="queryParam.vipId"></a-input>
-              </a-form-item>
-            </a-col>
-          </template>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -52,17 +30,6 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls">导出</a-button>
-      <a-upload
-        name="file"
-        :showUploadList="false"
-        :multiple="false"
-        :action="importExcelUrl"
-        @change="handleImportExcel"
-      >
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -97,8 +64,13 @@
         @change="handleTableChange"
       >
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-
+          <a-popconfirm
+            title="确认充值?"
+            @confirm="() => confirmRecharge(record.id)"
+            v-if="record.rechargeStatus == '1'"
+          >
+            <a>确认充值</a>
+          </a-popconfirm>
           <a-divider type="vertical"/>
           <a-dropdown>
             <a class="ant-dropdown-link">
@@ -124,6 +96,7 @@
 </template>
 
 <script>
+import { httpAction } from '@/api/manage'
 import RechargeModal from './modules/RechargeModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
@@ -135,6 +108,7 @@ export default {
   },
   data() {
     return {
+      confirmLoading: 'false',
       description: '充值记录管理页面',
       // 表头
       columns: [
@@ -156,7 +130,7 @@ export default {
         {
           title: '充值状态',
           align: 'center',
-          dataIndex: 'rechargeStatus'
+          dataIndex: 'rechargeStatus_dictText'
         },
         {
           title: '充值时间',
@@ -166,12 +140,12 @@ export default {
         {
           title: '充值方式',
           align: 'center',
-          dataIndex: 'rechargeType'
+          dataIndex: 'rechargeType_dictText'
         },
         {
-          title: '用户id',
+          title: '用户',
           align: 'center',
-          dataIndex: 'vipId'
+          dataIndex: 'phone'
         },
         {
           title: '操作',
@@ -182,6 +156,7 @@ export default {
       ],
       url: {
         list: '/recharge/recharge/list',
+        recharge: '/recharge/recharge/recharge',
         delete: '/recharge/recharge/delete',
         deleteBatch: '/recharge/recharge/deleteBatch',
         exportXlsUrl: 'recharge/recharge/exportXls',
@@ -194,7 +169,35 @@ export default {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
     }
   },
-  methods: {}
+  methods: {
+    confirmRecharge(pid) {
+      const that = this
+      that.confirmLoading = true
+      let httpurl = this.url.recharge
+      let method = 'put'
+
+      let data = {
+        id: pid
+      }
+
+      let formData = Object.assign(data)
+      //时间格式化
+
+      httpAction(httpurl, formData, method)
+        .then(res => {
+          if (res.success) {
+            that.$message.success(res.message)
+            that.$emit('ok')
+          } else {
+            that.$message.warning(res.message)
+          }
+        })
+        .finally(() => {
+          that.confirmLoading = false
+          this.loadData();
+        })
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

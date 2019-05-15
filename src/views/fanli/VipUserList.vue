@@ -5,32 +5,10 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="头像">
-              <a-input placeholder="请输入头像" v-model="queryParam.avater"></a-input>
+            <a-form-item label="手机号">
+              <a-input placeholder="请输入手机号" v-model="queryParam.phone"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
-            <a-form-item label="钱包余额">
-              <a-input placeholder="请输入钱包余额" v-model="queryParam.bucketmoney"></a-input>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="充值总额">
-                <a-input placeholder="请输入充值总额" v-model="queryParam.buymoney"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="登陆密码">
-                <a-input placeholder="请输入登陆密码" v-model="queryParam.loginpwd"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="昵称">
-                <a-input placeholder="请输入昵称" v-model="queryParam.nickname"></a-input>
-              </a-form-item>
-            </a-col>
-          </template>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -40,10 +18,6 @@
                 icon="reload"
                 style="margin-left: 8px"
               >重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
             </span>
           </a-col>
         </a-row>

@@ -184,6 +184,11 @@ export default {
           dataIndex: 'payType'
         },
         {
+          title: '购买权限',
+          align: 'center',
+          dataIndex: 'permission'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           align: 'center',

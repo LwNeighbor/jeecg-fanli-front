@@ -922,7 +922,7 @@
 
 "@tinymce/tinymce-vue@^2.0.0":
   version "2.0.0"
-  resolved "https://registry.npmjs.org/@tinymce/tinymce-vue/-/tinymce-vue-2.0.0.tgz#41cea256f67f195ac52f71b1cc0bcbda850c86f0"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-vue/-/tinymce-vue-2.0.0.tgz#41cea256f67f195ac52f71b1cc0bcbda850c86f0"
   integrity sha512-oUl8r1WvoLsy1NxpFMPNa8hZohkha6biNGLBAhtWUEIsqnmAhvosTPdVj2uroAlK7rjOcDTOy2jIkuNOsLuvtA==
   dependencies:
     vue "^2.5.17"
@@ -9273,10 +9273,10 @@ tinycolor2@^1.4.1:
   resolved "https://registry.npmjs.org/tinycolor2/-/tinycolor2-1.4.1.tgz#f4fad333447bc0b07d4dc8e9209d8f39a8ac77e8"
   integrity sha1-9PrTM0R7wLB9TcjpIJ2POaisd+g=
 
-tinymce@^5.0.2:
-  version "5.0.3"
-  resolved "https://registry.npmjs.org/tinymce/-/tinymce-5.0.3.tgz#40fa8658b5bdf58e7f04c816b38e1b06f96f6cfe"
-  integrity sha512-x7D0ttqn176Z4CWQIITMjcEtMGUjiaK0Y2FN2vO8DiyUeIHCdr70jJDSoGhuXtXX70Sw4Bd5UFfqIn/bG3HXcg==
+tinymce@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.0.5.tgz#4e46cb61a095605db1ed457253447f2ec28466b9"
+  integrity sha512-3cE7gfufXlbFBz4TMV/nfJtMM+a8J7K5Jy8keEU+T5QIRXcykF5/j7Dd32OXKQczqijy11+ffqM5tnvAbHzo/A==
 
 tmp@^0.0.33:
   version "0.0.33"

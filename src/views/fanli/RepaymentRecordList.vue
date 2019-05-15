@@ -10,26 +10,9 @@
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
-            <a-form-item label="返利说明">
-              <a-input placeholder="请输入返利说明" v-model="queryParam.repaymentIntro"></a-input>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="返利金额">
-                <a-input placeholder="请输入返利金额" v-model="queryParam.repaymentMoney"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="返利时间">
-                <a-input placeholder="请输入返利时间" v-model="queryParam.repaymentTime"></a-input>
-              </a-form-item>
-            </a-col>
-          </template>
-          <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button
+              <!-- <a-button
                 type="primary"
                 @click="searchReset"
                 icon="reload"
@@ -38,7 +21,7 @@
               <a @click="handleToggleSearch" style="margin-left: 8px">
                 {{ toggleSearchStatus ? '收起' : '展开' }}
                 <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
+              </a> -->
             </span>
           </a-col>
         </a-row>
@@ -47,17 +30,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls">导出</a-button>
-      <a-upload
-        name="file"
-        :showUploadList="false"
-        :multiple="false"
-        :action="importExcelUrl"
-        @change="handleImportExcel"
-      >
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
+      <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -92,7 +65,7 @@
         @change="handleTableChange"
       >
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <!-- <a @click="handleEdit(record)">编辑</a> -->
 
           <a-divider type="vertical"/>
           <a-dropdown>
@@ -162,6 +135,11 @@ export default {
           title: '返利时间',
           align: 'center',
           dataIndex: 'repaymentTime'
+        },
+        {
+          title: '返利状态',
+          align: 'center',
+          dataIndex: 'repaymentStatus_dictText'
         },
         {
           title: '操作',

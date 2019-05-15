@@ -10,29 +10,11 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="头像">
-          <a-input placeholder="请输入头像" v-decorator="['avater', {}]"/>
-        </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="钱包余额">
           <a-input placeholder="请输入钱包余额" v-decorator="['bucketmoney', {}]"/>
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="充值总额">
-          <a-input placeholder="请输入充值总额" v-decorator="['buymoney', {}]"/>
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="登陆密码">
-          <a-input placeholder="请输入登陆密码" v-decorator="['loginpwd', {}]"/>
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="昵称">
-          <a-input placeholder="请输入昵称" v-decorator="['nickname', {}]"/>
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="手机号">
-          <a-input placeholder="请输入手机号" v-decorator="['phone', {}]"/>
-        </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="资产总额">
           <a-input placeholder="请输入资产总额" v-decorator="['total', {}]"/>
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="交易密码">
-          <a-input placeholder="请输入交易密码" v-decorator="['tradepwd', {}]"/>
         </a-form-item>
       </a-form>
     </a-spin>

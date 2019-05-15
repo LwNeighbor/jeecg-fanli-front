@@ -5,32 +5,10 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="提现账号">
-              <a-input placeholder="请输入提现账号" v-model="queryParam.cashAccount"></a-input>
+            <a-form-item label="会员手机号">
+              <a-input placeholder="请输入手机号" v-model="queryParam.phone"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
-            <a-form-item label="提现金额">
-              <a-input placeholder="请输入提现金额" v-model="queryParam.cashMoney"></a-input>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="账号名称">
-                <a-input placeholder="请输入账号名称" v-model="queryParam.cashName"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="提现状态">
-                <a-input placeholder="请输入提现状态" v-model="queryParam.cashStatus"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="提现时间">
-                <a-input placeholder="请输入提现时间" v-model="queryParam.cashTime"></a-input>
-              </a-form-item>
-            </a-col>
-          </template>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -40,10 +18,10 @@
                 icon="reload"
                 style="margin-left: 8px"
               >重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
+              <!-- <a @click="handleToggleSearch" style="margin-left: 8px">
                 {{ toggleSearchStatus ? '收起' : '展开' }}
                 <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
+              </a> -->
             </span>
           </a-col>
         </a-row>
@@ -52,17 +30,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls">导出</a-button>
-      <a-upload
-        name="file"
-        :showUploadList="false"
-        :multiple="false"
-        :action="importExcelUrl"
-        @change="handleImportExcel"
-      >
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
+     <!--  <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -97,8 +65,14 @@
         @change="handleTableChange"
       >
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-
+          <!-- <a @click="handleEdit(record)">编辑</a> -->
+          <a-popconfirm
+            title="确认打款?"
+            @confirm="() => confirmCash(record.id)"
+            v-if="record.cashStatus == '1'"
+          >
+            <a>打款</a>
+          </a-popconfirm>
           <a-divider type="vertical"/>
           <a-dropdown>
             <a class="ant-dropdown-link">
@@ -124,6 +98,7 @@
 </template>
 
 <script>
+import { httpAction } from '@/api/manage'
 import CashModal from './modules/CashModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
@@ -149,6 +124,11 @@ export default {
           }
         },
         {
+          title: '用户手机号',
+          align: 'center',
+          dataIndex: 'phone'
+        },
+        {
           title: '提现账号',
           align: 'center',
           dataIndex: 'cashAccount'
@@ -166,17 +146,12 @@ export default {
         {
           title: '提现状态',
           align: 'center',
-          dataIndex: 'cashStatus'
+          dataIndex: 'cashStatus_dictText'
         },
         {
           title: '提现时间',
           align: 'center',
           dataIndex: 'cashTime'
-        },
-        {
-          title: '用户id',
-          align: 'center',
-          dataIndex: 'vipId'
         },
         {
           title: '操作',
@@ -186,11 +161,10 @@ export default {
         }
       ],
       url: {
+        cashUrl: '/cash/cash/cash',
         list: '/cash/cash/list',
         delete: '/cash/cash/delete',
-        deleteBatch: '/cash/cash/deleteBatch',
-        exportXlsUrl: 'cash/cash/exportXls',
-        importExcelUrl: 'cash/cash/importExcel'
+        deleteBatch: '/cash/cash/deleteBatch'
       }
     }
   },
@@ -199,7 +173,35 @@ export default {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
     }
   },
-  methods: {}
+  methods: {
+    confirmCash(pid) {
+      const that = this
+      that.confirmLoading = true
+      let httpurl = this.url.cashUrl
+      let method = 'put'
+
+      let data = {
+        id: pid
+      }
+
+      let formData = Object.assign(data)
+      //时间格式化
+
+      httpAction(httpurl, formData, method)
+        .then(res => {
+          if (res.success) {
+            that.$message.success(res.message)
+            that.$emit('ok')
+          } else {
+            that.$message.warning(res.message)
+          }
+        })
+        .finally(() => {
+          that.confirmLoading = false
+          this.loadData();
+        })
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

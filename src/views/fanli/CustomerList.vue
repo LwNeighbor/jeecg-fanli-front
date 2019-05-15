@@ -5,11 +5,6 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="客服昵称">
-              <a-input placeholder="请输入客服昵称" v-model="queryParam.cusName"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :md="6" :sm="8">
             <a-form-item label="客服号">
               <a-input placeholder="请输入客服号" v-model="queryParam.cusNumber"></a-input>
             </a-form-item>
@@ -23,10 +18,6 @@
                 icon="reload"
                 style="margin-left: 8px"
               >重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
             </span>
           </a-col>
         </a-row>
@@ -36,16 +27,6 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls">导出</a-button>
-      <a-upload
-        name="file"
-        :showUploadList="false"
-        :multiple="false"
-        :action="importExcelUrl"
-        @change="handleImportExcel"
-      >
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">

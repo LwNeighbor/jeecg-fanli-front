@@ -5,27 +5,10 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="公告详情">
-              <a-input placeholder="请输入公告详情" v-model="queryParam.noticeDesc"></a-input>
+            <a-form-item label="公告标题">
+              <a-input placeholder="请输入公告标题" v-model="queryParam.title"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
-            <a-form-item label="公告图片">
-              <a-input placeholder="请输入公告图片" v-model="queryParam.noticeImg"></a-input>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="发布时间">
-                <a-input placeholder="请输入发布时间" v-model="queryParam.noticeTime"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="公告标题">
-                <a-input placeholder="请输入公告标题" v-model="queryParam.title"></a-input>
-              </a-form-item>
-            </a-col>
-          </template>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -44,20 +27,18 @@
         </a-row>
       </a-form>
     </div>
+     <!--图片预览-->
+    <template>
+      <div>
+        <a-modal title="图片预览" v-model="visible" @ok="handleOk">
+          <img :src="imageUrl" style="width: 100%;height: 100%;">
+        </a-modal>
+      </div>
+    </template>
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls">导出</a-button>
-      <a-upload
-        name="file"
-        :showUploadList="false"
-        :multiple="false"
-        :action="importExcelUrl"
-        @change="handleImportExcel"
-      >
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -91,6 +72,12 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange"
       >
+
+        <template slot="imageSlots" slot-scope="text, record">
+          <div class="anty-img-wrap">
+            <img :src="getAvatarView(record.noticeImg)" @click="showImg(record.noticeImg)">
+          </div>
+        </template>
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -130,6 +117,8 @@ export default {
   },
   data() {
     return {
+      visible: false,
+      imageUrl: '',
       description: '系统公告管理页面',
       // 表头
       columns: [
@@ -144,14 +133,10 @@ export default {
           }
         },
         {
-          title: '公告详情',
-          align: 'center',
-          dataIndex: 'noticeDesc'
-        },
-        {
           title: '公告图片',
           align: 'center',
-          dataIndex: 'noticeImg'
+          dataIndex: 'noticeImg',
+          scopedSlots: { customRender: 'imageSlots' }
         },
         {
           title: '发布时间',
@@ -171,11 +156,10 @@ export default {
         }
       ],
       url: {
+        imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
         list: '/notice/notice/list',
         delete: '/notice/notice/delete',
-        deleteBatch: '/notice/notice/deleteBatch',
-        exportXlsUrl: 'notice/notice/exportXls',
-        importExcelUrl: 'notice/notice/importExcel'
+        deleteBatch: '/notice/notice/deleteBatch'
       }
     }
   },
@@ -184,7 +168,18 @@ export default {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
     }
   },
-  methods: {}
+  methods: {
+    getAvatarView(image) {
+      return this.url.imgerver + '/' + image
+    },
+    showImg(image) {
+      this.visible = true
+      this.imageUrl = this.url.imgerver + '/' + image
+    },
+    handleOk(e) {
+      this.visible = false
+    },
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -216,5 +211,13 @@ export default {
 .ant-modal-cust-warp .ant-modal-content {
   height: 90% !important;
   overflow-y: hidden;
+}
+.anty-img-wrap {
+  height: 50px;
+  position: relative;
+}
+
+.anty-img-wrap > img {
+  max-height: 100%;
 }
 </style>

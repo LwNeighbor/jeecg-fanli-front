@@ -5,27 +5,10 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="充值说明">
-              <a-input placeholder="请输入充值说明" v-model="queryParam.buyDesc"></a-input>
+            <a-form-item label="提现说明">
+              <a-input placeholder="请输入提现说明" v-model="queryParam.repaymentNotice"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
-            <a-form-item label="最低提现金额">
-              <a-input placeholder="请输入最低提现金额" v-model="queryParam.lowMoney"></a-input>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="新手教程">
-                <a-input placeholder="请输入新手教程" v-model="queryParam.newCourse"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="提现说明">
-                <a-input placeholder="请输入提现说明" v-model="queryParam.repaymentNotice"></a-input>
-              </a-form-item>
-            </a-col>
-          </template>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -35,10 +18,6 @@
                 icon="reload"
                 style="margin-left: 8px"
               >重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
             </span>
           </a-col>
         </a-row>
@@ -48,16 +27,6 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls">导出</a-button>
-      <a-upload
-        name="file"
-        :showUploadList="false"
-        :multiple="false"
-        :action="importExcelUrl"
-        @change="handleImportExcel"
-      >
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -119,11 +88,11 @@
 </template>
 
 <script>
-import FanLiModal from './modules/FanLiModal'
+import FanliModal from './modules/FanLiModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
 export default {
-  name: 'FanliList',
+  name: 'FanLiList',
   mixins: [JeecgListMixin],
   components: {
     FanliModal
@@ -144,19 +113,9 @@ export default {
           }
         },
         {
-          title: '充值说明',
-          align: 'center',
-          dataIndex: 'buyDesc'
-        },
-        {
           title: '最低提现金额',
           align: 'center',
           dataIndex: 'lowMoney'
-        },
-        {
-          title: '新手教程',
-          align: 'center',
-          dataIndex: 'newCourse'
         },
         {
           title: '提现说明',
@@ -173,9 +132,7 @@ export default {
       url: {
         list: '/fanli/fanli/list',
         delete: '/fanli/fanli/delete',
-        deleteBatch: '/fanli/fanli/deleteBatch',
-        exportXlsUrl: 'fanli/fanli/exportXls',
-        importExcelUrl: 'fanli/fanli/importExcel'
+        deleteBatch: '/fanli/fanli/deleteBatch'
       }
     }
   },
