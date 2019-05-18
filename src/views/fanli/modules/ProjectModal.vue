@@ -19,11 +19,11 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="每天返利">
           <a-input placeholder="请输入每天返利" v-decorator="['dayProfit', {}]"/>
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="到期收益">
-          <a-input placeholder="请输入到期收益" v-decorator="['profit', {}]"/>
-        </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="投资期限">
           <a-input placeholder="请输入投资期限" v-decorator="['projectTime', {}]"/>
+        </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="到期收益">
+          <a-input placeholder="请输入到期收益" v-decorator="['profit', {}]"/>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="总金额">
           <a-input placeholder="请输入总金额" v-decorator="['totalMoney', {}]"/>
@@ -41,7 +41,7 @@
           <a-input placeholder="请输入还款方式:先息后本" v-decorator="['payType', {}]"/>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="项目介绍">
-          <a-input placeholder="请输入项目介绍" v-decorator="['projectIntro', {}]"/>
+          <a-textarea  placeholder="请输入项目介绍" v-decorator="['projectIntro', {}]" :autosize="{ minRows: 2, maxRows: 6 }"/>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -107,7 +107,8 @@ export default {
             'projectName',
             'projectTime',
             'recordStart',
-            'totalMoney'
+            'totalMoney',
+            'permission'
           )
         )
         //时间格式化

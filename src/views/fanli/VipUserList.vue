@@ -32,6 +32,32 @@
         </a-modal>
       </div>
     </template>
+    <template>
+      <div>
+        <a-modal
+          title="确认充值吗?"
+          :visible="moVisible"
+          @ok="ModaleOk"
+          :confirmLoading="confirmLoading"
+          @cancel="handleCancel"
+        >
+          <a-input placeholder="请输入充值金额" v-model="recharge"></a-input>
+        </a-modal>
+      </div>
+    </template>
+    <template>
+      <div>
+        <a-modal
+          title="确认提现吗?"
+          :visible="moVisible1"
+          @ok="CashOk"
+          :confirmLoading="confirmLoading"
+          @cancel="handleCancel"
+        >
+          <a-input placeholder="请输入提现金额" v-model="cash"></a-input>
+        </a-modal>
+      </div>
+    </template>
 
     <!-- 操作按钮区域 -->
     <!-- <div class="table-operator">
@@ -57,7 +83,7 @@
           <a-icon type="down"/>
         </a-button>
       </a-dropdown>
-    </div> -->
+    </div>-->
 
     <!-- table区域-begin -->
     <div>
@@ -88,9 +114,11 @@
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
           <a-divider type="vertical"/>
-          <a @click="handleEdit(record)">充值</a>
+          <a @click="showModal(record)">
+            充值
+          </a>
           <a-divider type="vertical"/>
-          <a @click="handleEdit(record)">提现</a>
+          <a @click="showModal1(record)">提现</a>
           <a-divider type="vertical"/>
           <a-dropdown>
             <a class="ant-dropdown-link">
@@ -101,11 +129,6 @@
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a></a>
                 </a-popconfirm>
               </a-menu-item>
             </a-menu>
@@ -121,8 +144,10 @@
 </template>
 
 <script>
+import { httpAction } from '@/api/manage'
 import VipUserModal from './modules/VipUserModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+import { fail } from 'assert';
 
 export default {
   name: 'VipUserList',
@@ -133,7 +158,11 @@ export default {
   data() {
     return {
       visible: false,
+      moVisible: false,
+      moVisible1: false,
+      confirmLoading: false,
       imageUrl: '',
+      model: {},
       description: '用户管理管理页面',
       // 表头
       columns: [
@@ -190,9 +219,12 @@ export default {
         list: '/vipuser/vipUser/list',
         delete: '/vipuser/vipUser/delete',
         deleteBatch: '/vipuser/vipUser/deleteBatch',
-        exportXlsUrl: 'vipuser/vipUser/exportXls',
-        importExcelUrl: 'vipuser/vipUser/importExcel'
-      }
+        rechargeUrl: '/vipuser/vipUser/recharge',
+        cashUrl: '/vipuser/vipUser/cash'
+      },
+      recharge: '',
+      cash: '',
+      vipId: ''
     }
   },
   computed: {
@@ -201,7 +233,7 @@ export default {
     }
   },
   methods: {
-     getAvatarView(image) {
+    getAvatarView(image) {
       return this.url.imgerver + '/' + image
     },
     showImg(image) {
@@ -209,9 +241,79 @@ export default {
       this.imageUrl = this.url.imgerver + '/' + image
     },
     handleOk(e) {
-      console.log(e);
       this.visible = false
     },
+    showModal(e) {
+      this.moVisible = true
+      this.vipId = e.id
+    },
+    showModal1(e) {
+      this.moVisible1 = true
+      this.vipId = e.id
+    },
+    ModaleOk() {
+      this.confirmLoading = true;
+      const that = this
+      let httpurl = this.url.rechargeUrl
+      let method = 'put'
+      //这里暂时将充值总额作为跳板
+      this.model.buymoney = this.recharge
+      this.model.id = this.vipId
+      
+      let formData = Object.assign(this.model)
+      //时间格式化
+
+      httpAction(httpurl, formData, method)
+        .then(res => {
+          if (res.success) {
+            that.$message.success(res.message)
+            that.$emit('ok')
+          } else {
+            that.$message.warning(res.message)
+          }
+        })
+        .finally(() => {
+          this.confirmLoading = false
+          this.moVisible = false;
+          this.loadData();
+        })
+        
+    },
+    CashOk() {
+      this.confirmLoading = true;
+      const that = this
+      let httpurl = this.url.cashUrl
+      let method = 'put'
+      //这里暂时将充值总额作为跳板
+      this.model.buymoney = this.cash
+      this.model.id = this.vipId
+      
+      let formData = Object.assign(this.model)
+      //时间格式化
+
+      httpAction(httpurl, formData, method)
+        .then(res => {
+          if (res.success) {
+            that.$message.success(res.message)
+            that.$emit('ok')
+          } else {
+            that.$message.warning(res.message)
+          }
+        })
+        .finally(() => {
+          that.confirmLoading = false
+          this.moVisible1 = false;
+          this.loadData();
+        })
+        
+    },
+    handleCancel(e) {
+      this.moVisible = false
+    },
+    handleCancel1(e) {
+      this.moVisible1 = false
+    },
+   
   }
 }
 </script>

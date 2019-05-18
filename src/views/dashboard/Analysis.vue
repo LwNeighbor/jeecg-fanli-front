@@ -1,6 +1,6 @@
 <template>
   <div class="page-header-index-wide">
-    <a-row :gutter="24">
+    <!-- <a-row :gutter="24">
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
         <chart-card :loading="loading" title="总销售额" total="￥126,560">
           <a-tooltip title="指标说明" slot="action">
@@ -159,7 +159,7 @@
           <p>card content</p>
         </a-card>
       </a-col>
-    </a-row>
+    </a-row> -->
   </div>
 </template>
 
