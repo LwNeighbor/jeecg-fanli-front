@@ -134,7 +134,7 @@ export default {
           }
         },
         {
-          title: 'ID',
+          title: '理财记录ID',
           align: 'center',
           dataIndex: 'id'
         },

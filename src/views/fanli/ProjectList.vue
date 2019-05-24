@@ -88,6 +88,22 @@
       >
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
+           <a-divider type="vertical"/>
+          <a-popconfirm
+            title="确认下架?"
+            @confirm="() => upAndDown(record.id,2)"
+            v-if="record.projectStatus == '1'"
+          >
+            <a>下架</a>
+          </a-popconfirm>
+          
+          <a-popconfirm
+            title="确认上架?"
+            @confirm="() => upAndDown(record.id,1)"
+            v-if="record.projectStatus == '2'"
+          >
+            <a>上架</a>
+          </a-popconfirm>
 
           <a-divider type="vertical"/>
           <a-dropdown>
@@ -114,6 +130,7 @@
 </template>
 
 <script>
+import { httpAction } from '@/api/manage'
 import ProjectModal from './modules/ProjectModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
@@ -189,6 +206,11 @@ export default {
           dataIndex: 'permission'
         },
         {
+          title: '状态',
+          align: 'center',
+          dataIndex: 'projectStatus_dictText'
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
@@ -199,8 +221,7 @@ export default {
         list: '/project/project/list',
         delete: '/project/project/delete',
         deleteBatch: '/project/project/deleteBatch',
-        exportXlsUrl: 'project/project/exportXls',
-        importExcelUrl: 'project/project/importExcel'
+        upAndDown: '/project/project/up',
       }
     }
   },
@@ -209,7 +230,36 @@ export default {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
     }
   },
-  methods: {}
+  methods: {
+    upAndDown(pid,number) {
+      const that = this
+      that.confirmLoading = true
+      let httpurl = this.url.upAndDown
+      let method = 'post'
+
+      let data = {
+        id: pid,
+        projectStatus: number
+      }
+
+      let formData = Object.assign(data)
+      //时间格式化
+
+      httpAction(httpurl, formData, method)
+        .then(res => {
+          if (res.success) {
+            that.$message.success(res.message)
+            that.$emit('ok')
+          } else {
+            that.$message.warning(res.message)
+          }
+        })
+        .finally(() => {
+          that.confirmLoading = false
+          this.loadData();
+        })
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

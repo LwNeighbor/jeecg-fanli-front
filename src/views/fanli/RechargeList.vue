@@ -64,6 +64,8 @@
         @change="handleTableChange"
       >
         <span slot="action" slot-scope="text, record">
+          <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical"/>
           <a-popconfirm
             title="确认充值?"
             @confirm="() => confirmRecharge(record.id)"

@@ -16,27 +16,6 @@
             v-decorator="['rechargeMoney', validatorRules.rechargeMoney ]"
           />
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="充值状态">
-          <a-input
-            placeholder="请输入充值状态"
-            v-decorator="['rechargeStatus', validatorRules.rechargeStatus ]"
-          />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="充值时间">
-          <a-input
-            placeholder="请输入充值时间"
-            v-decorator="['rechargeTime', validatorRules.rechargeTime ]"
-          />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="充值方式">
-          <a-input
-            placeholder="请输入充值方式"
-            v-decorator="['rechargeType', validatorRules.rechargeType ]"
-          />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="用户id">
-          <a-input placeholder="请输入用户id" v-decorator="['vipId', validatorRules.vipId ]"/>
-        </a-form-item>
       </a-form>
     </a-spin>
   </a-modal>
