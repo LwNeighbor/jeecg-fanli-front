@@ -205,11 +205,11 @@ export default {
           align: 'center',
           dataIndex: 'permission'
         },
-        {
+        /* {
           title: '状态',
           align: 'center',
           dataIndex: 'projectStatus_dictText'
-        },
+        }, */
         {
           title: '操作',
           dataIndex: 'action',

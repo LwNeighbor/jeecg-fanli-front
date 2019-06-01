@@ -5,8 +5,8 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="用户id">
-              <a-input placeholder="请输入用户id" v-model="queryParam.vipId"></a-input>
+            <a-form-item label="用户手机号">
+              <a-input placeholder="用户手机号" v-model="queryParam.phone"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
@@ -105,9 +105,9 @@ export default {
           dataIndex: 'feedbackContent'
         },
         {
-          title: '用户id',
+          title: '手机号',
           align: 'center',
-          dataIndex: 'vipId'
+          dataIndex: 'phone'
         },
         {
           title: '操作',

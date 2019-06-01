@@ -1,169 +1,109 @@
 <template>
   <div class="page-header-index-wide">
-    <!-- <a-row :gutter="24">
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="总销售额" total="￥126,560">
-          <a-tooltip title="指标说明" slot="action">
+    <a-row :gutter="24">
+      <a-col :sm="24" :md="12" :xl="8" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="累计注册量" total=""><h1>{{vipCount}}人</h1>
+          <a-tooltip title="平台总共注册的会员数量" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
-          <div>
-            <trend flag="up" style="margin-right: 16px;">
-              <span slot="term">周同比</span>
-              12%
-            </trend>
-            <trend flag="down">
-              <span slot="term">日同比</span>
-              11%
-            </trend>
-          </div>
-          <template slot="footer">日均销售额<span>￥ 234.56</span></template>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="访问量" :total="8846 | NumberFormat">
-          <a-tooltip title="指标说明" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-area />
-          </div>
-          <template slot="footer">日访问量<span> {{ '1234' | NumberFormat }}</span></template>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="支付笔数" :total="6560 | NumberFormat">
-          <a-tooltip title="指标说明" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-bar :height="40" />
-          </div>
-          <template slot="footer">转化率 <span>60%</span></template>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="运营活动效果" total="78%">
-          <a-tooltip title="指标说明" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-progress color="rgb(19, 194, 194)" :target="80" :percentage="78" :height="8" />
-          </div>
           <template slot="footer">
-            <trend flag="down" style="margin-right: 16px;">
-              <span slot="term">同周比</span>
-              12%
+            <trend flag="" style="margin-right: 16px;">
+              <span slot="term">累计注册量</span>
+              <h3>{{vipCount}} 人</h3>
             </trend>
-            <trend flag="up">
-              <span slot="term">日环比</span>
-              80%
+          </template>
+        </chart-card>
+      </a-col>
+      <a-col :sm="24" :md="12" :xl="8" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="累计充值金额" total=""><h1>￥ {{ rechargeMoney }}</h1>
+          <a-tooltip title="会员总共充值的金额" slot="action">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <template slot="footer">
+            <trend flag="" style="margin-right: 16px;">
+              <span slot="term">充值总额</span>
+              <h3>￥ {{rechargeMoney}}</h3>
+            </trend>
+            <trend flag="">
+              <span slot="term">充值笔数</span>
+              <h3>{{rechargeCount}}</h3>
+            </trend>
+          </template>
+          
+        </chart-card>
+      </a-col>
+      <a-col :sm="24" :md="12" :xl="8" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="累计提现金额" total=""><h1>￥ {{cashMoney}}</h1>
+          <a-tooltip title="会员总共提现的金额" slot="action">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+         <template slot="footer">
+            <trend flag="" style="margin-right: 16px;">
+              <span slot="term">提现总额</span>
+              <h3>￥ {{cashMoney}}</h3>
+            </trend>
+            <trend flag="">
+              <span slot="term">提现笔数</span>
+              <h3>{{cashCount}}</h3>
             </trend>
           </template>
         </chart-card>
       </a-col>
     </a-row>
-
-    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
-      <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>今日</a>
-              <a>本周</a>
-              <a>本月</a>
-              <a>本年</a>
-            </div>
-            <a-range-picker :style="{width: '256px'}" />
-          </div>
-          <a-tab-pane loading="true" tab="销售额" key="1">
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="销售额排行" :dataSource="barData"/>
-              </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-          <a-tab-pane tab="访问量" key="2">
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="销售额趋势" :dataSource="barData"/>
-              </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-        </a-tabs>
-      </div>
-    </a-card>
-
-    <a-row :gutter="12">
-      <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-        <a-card :loading="loading" :bordered="false" title="实时访问统计" :style="{ marginTop: '24px' }">
-          <a-dropdown :trigger="['click']" placement="bottomLeft" slot="extra">
-            <a class="ant-dropdown-link" href="#">
-              <a-icon type="ellipsis" />
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;">操作一</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;">操作二</a>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-          <div style="height: 105px">
-            <a-row>
-              <a-col :span="8">
-                <div class="head-info" :class="center && 'center'">
-                  <span>今日IP</span>
-                  <p><a>{{ loginfo.todayIp }}</a></p>
-                </div>
-              </a-col>
-              <a-col :span="8">
-                <div class="head-info" :class="center && 'center'">
-                  <span>今日访问</span>
-                  <p><a>{{ loginfo.todayVisitCount }}</a></p>
-                </div>
-              </a-col>
-              <a-col :span="8">
-                <div class="head-info" :class="center && 'center'">
-                  <span>访问总览</span>
-                  <p><a>{{ loginfo.totalVisitCount }}</a></p>
-                </div>
-              </a-col>
-            </a-row>
-          </div>
-        </a-card>
+    <a-row :gutter="24">
+      <a-col :sm="24" :md="12" :xl="8" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="今日注册量" total=""><h1>{{dayUser}}人</h1>
+          <a-tooltip title="平台今日总共注册的会员数量" slot="action">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <template slot="footer">
+            <trend flag="" style="margin-right: 16px;">
+              <span slot="term">今日注册量</span>
+              <h3>{{dayUser}} 人</h3>
+            </trend>
+          </template>
+        </chart-card>
       </a-col>
-      <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-        <a-card :loading="loading" :bordered="false" title="销售额类别占比" :style="{ marginTop: '24px' }">
-          <a-dropdown :trigger="['click']" placement="bottomLeft" slot="extra">
-            <a class="ant-dropdown-link" href="#">
-              <a-icon type="ellipsis" />
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;">操作一</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;">操作二</a>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-          <p>card content</p>
-          <p>card content</p>
-          <p>card content</p>
-        </a-card>
+      <a-col :sm="24" :md="12" :xl="8" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="今日充值金额"><h1>￥ {{rechargeMoneyDay}}</h1>
+          <a-tooltip title="会员今日总共充值的金额" slot="action">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <template slot="footer">
+            <trend flag="" style="margin-right: 16px;">
+              <span slot="term">充值总额</span>
+              <h3>￥ {{rechargeMoneyDay}}</h3>
+            </trend>
+            <trend flag="">
+              <span slot="term">充值笔数</span>
+              <h3>{{rechargeCountDay}}</h3>
+            </trend>
+          </template>
+        </chart-card>
       </a-col>
-    </a-row> -->
+      <a-col :sm="24" :md="12" :xl="8" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="今日提现总额" total=""><h1>￥ {{cashMoneyDay}}</h1>
+          <a-tooltip title="会员今日总共提现的金额" slot="action">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <template slot="footer">
+            <trend flag="" style="margin-right: 16px;">
+              <span slot="term">提现总额</span>
+              <h3>￥ {{cashMoneyDay}}</h3>
+            </trend>
+            <trend flag="">
+              <span slot="term">提现笔数</span>
+              <h3>{{cashCountDay}}</h3>
+            </trend>
+          </template>
+        </chart-card>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
 <script>
+  import { httpAction } from '@/api/manage'
   import ChartCard from '@/components/ChartCard'
   import ACol from "ant-design-vue/es/grid/Col"
   import ATooltip from "ant-design-vue/es/tooltip/Tooltip"
@@ -173,22 +113,7 @@
   import RankList from '@/components/chart/RankList'
   import Bar from '@/components/chart/Bar'
   import Trend from '@/components/Trend'
-  import {getLoginfo} from '@/api/api'
 
-  const rankList = []
-  for (let i = 0; i < 7; i++) {
-    rankList.push({
-      name: '白鹭岛 ' + (i+1) + ' 号店',
-      total: 1234.56 - i * 100
-    })
-  }
-  const barData = []
-  for (let i = 0; i < 12; i += 1) {
-    barData.push({
-      x: `${i + 1}月`,
-      y: Math.floor(Math.random() * 1000) + 200
-    })
-  }
   export default {
     name: "Analysis",
     components: {
@@ -206,9 +131,20 @@
       return {
         loading: true,
         center: null,
-        rankList,
-        barData,
         loginfo:{},
+        vipCount: '',
+        cashCount: '',
+        cashMoney: '',
+        rechargeCount: '',
+        rechargeMoney: '',
+        dayUser: '',
+        cashCountDay: '',
+        cashMoneyDay: '',
+        rechargeCountDay: '',
+        rechargeMoneyDay: '',
+        url: {
+          list: '/home/analysis/'
+        }
       }
     },
     created() {
@@ -219,11 +155,28 @@
     },
     methods: {
       initLogInfo () {
-        getLoginfo(null).then((res)=>{
-          if(res.success){
-            this.loginfo = res.result;
-          }
-        })
+        let httpurl = this.url.list
+        let method = 'get'
+       
+        httpAction(httpurl, '', method)
+          .then(res => {
+            if (res.success) {
+             // this.$message.success(res.message)
+              this.vipCount = res.result.vipCount;
+              this.cashCount = res.result.cashCount;
+              this.cashMoney = res.result.cashMoney;
+              this.rechargeCount = res.result.rechargeCount;
+              this.rechargeMoney = res.result.rechargeMoney;
+              this.dayUser = res.result.dayUser;
+              this.cashCountDay = res.result.cashCountDay;
+              this.cashMoneyDay = res.result.cashMoneyDay;
+              this.rechargeCountDay = res.result.rechargeCountDay;
+               this.rechargeMoneyDay = res.result.rechargeMoneyDay;
+
+            } else {
+              //this.$message.warning(res.message)
+            }
+          })
       },
     }
   }

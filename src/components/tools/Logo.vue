@@ -13,7 +13,7 @@
     props: {
       title: {
         type: String,
-        default: '淘金返利',
+        default: '盛泽财富',
         required: false
       },
       showTitle: {

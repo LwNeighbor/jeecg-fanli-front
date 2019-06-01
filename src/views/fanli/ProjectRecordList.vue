@@ -9,11 +9,6 @@
               <a-input placeholder="请输入用户手机号" v-model="queryParam.phone"></a-input>
             </a-form-item>
           </a-col>
-         <a-col :md="6" :sm="8">
-            <a-form-item label="ID">
-              <a-input placeholder="请输入ID号" v-model="queryParam.id"></a-input>
-            </a-form-item>
-          </a-col>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -57,7 +52,7 @@
           <a-icon type="down"/>
         </a-button>
       </a-dropdown>
-    </div> -->
+    </div>-->
 
     <!-- table区域-begin -->
     <div>
@@ -78,8 +73,8 @@
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange"
+        @expand="handleExpand"
       >
-        
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -98,6 +93,17 @@
             </a-menu>
           </a-dropdown>
         </span>
+        <a-table
+          slot="expandedRowRender"
+          slot-scope=""
+          :columns="innerColumns"
+          :dataSource="innerData"
+          size="middle"
+          bordered
+          rowKey="id"
+          :pagination="false"
+          :loading="loading"
+        ></a-table>
       </a-table>
     </div>
     <!-- table区域-end -->
@@ -108,6 +114,7 @@
 </template>
 
 <script>
+import { getAction } from '@/api/manage'
 import ProjectRecordModal from './modules/ProjectRecordModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
@@ -121,23 +128,43 @@ export default {
     return {
       buyDate: '',
       description: '理财记录管理页面',
+      // 子表表头
+      innerColumns: [
+        {
+          title: '返利说明',
+          align: 'center',
+          dataIndex: 'repaymentIntro'
+        },
+        {
+          title: '返利金额',
+          align: 'center',
+          dataIndex: 'repaymentMoney'
+        },
+        {
+          title: '返利时间',
+          align: 'center',
+          dataIndex: 'repaymentTime'
+        },
+        {
+          title: '返利状态',
+          align: 'center',
+          key: 'repaymentStatus',
+          customRender: function(text) {
+            if (text.repaymentStatus == 1) {
+              return '返利中'
+            } else if (text.repaymentStatus == 2) {
+              return '返利成功'
+            } else {
+              return text
+            }
+          }
+        }
+      ],
+      innerData: [],
+      expandedRowKeys: [],
+      id: ' ',
       // 表头
       columns: [
-        {
-          title: '#',
-          dataIndex: '',
-          key: 'rowIndex',
-          width: 60,
-          align: 'center',
-          customRender: function(t, r, index) {
-            return parseInt(index) + 1
-          }
-        },
-        {
-          title: '理财记录ID',
-          align: 'center',
-          dataIndex: 'id'
-        },
         {
           title: '项目名称',
           align: 'center',
@@ -203,18 +230,33 @@ export default {
         list: '/projectRecord/projectRecord/list',
         delete: '/projectRecord/projectRecord/delete',
         deleteBatch: '/projectRecord/projectRecord/deleteBatch',
-        exportXlsUrl: 'projectRecord/projectRecord/exportXls',
-        importExcelUrl: 'projectRecord/projectRecord/importExcel'
+        customerListByMainId: '/repaymentRecord/repaymentRecord/inlineList'
       }
     }
   },
   computed: {
     importExcelUrl: function() {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
+    },
+    currentId() {
+      return this.id
     }
   },
   methods: {
-  
+    handleExpand(expanded, record) {
+      this.expandedRowKeys = []
+      this.innerData = []
+      if (expanded === true) {
+        this.loading = true
+        this.expandedRowKeys.push(record.id)
+        getAction(this.url.customerListByMainId, { recordId: record.id }).then(res => {
+          if (res.success) {
+            this.loading = false
+            this.innerData = res.result
+          }
+        })
+      }
+    }
   }
 }
 </script>

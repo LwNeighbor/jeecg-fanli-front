@@ -5,6 +5,11 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
+            <a-form-item label="请输入充值订单编号">
+              <a-input placeholder="请输入充值订单编号" v-model="queryParam.rechargeNo"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
             <a-form-item label="请输入手机号">
               <a-input placeholder="请输入手机号" v-model="queryParam.phone"></a-input>
             </a-form-item>
@@ -143,6 +148,11 @@ export default {
           title: '充值方式',
           align: 'center',
           dataIndex: 'rechargeType_dictText'
+        },
+        {
+          title: '充值订单',
+          align: 'center',
+          dataIndex: 'rechargeNo'
         },
         {
           title: '用户',
