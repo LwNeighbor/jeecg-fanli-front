@@ -76,27 +76,21 @@
         @expand="handleExpand"
       >
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-
-          <a-divider type="vertical"/>
-          <a-dropdown>
-            <a class="ant-dropdown-link">
-              更多
-              <a-icon type="down"/>
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
+          <a-popconfirm
+            title="确认中断?"
+            @confirm="() => upAndDown(record.id)"
+            v-if="record.projectStatus == '1' && record.updown === 'N'"
+          >
+            <a>中断</a>
+          </a-popconfirm>
+          
+            <a v-if="record.projectStatus == '1' && record.updown === 'Y'">已中断</a>
+         
         </span>
         <a-table
           slot="expandedRowRender"
           slot-scope=""
-          :columns="innerColumns"
+          :columns="innerColumns" 
           :dataSource="innerData"
           size="middle"
           bordered
@@ -117,6 +111,7 @@
 import { getAction } from '@/api/manage'
 import ProjectRecordModal from './modules/ProjectRecordModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+import { httpAction } from '@/api/manage'
 
 export default {
   name: 'ProjectRecordList',
@@ -162,7 +157,7 @@ export default {
       ],
       innerData: [],
       expandedRowKeys: [],
-      id: ' ',
+      id: ' ',  
       // 表头
       columns: [
         {
@@ -224,13 +219,20 @@ export default {
           title: '认购时间',
           align: 'center',
           dataIndex: 'startTime'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align: 'center',
+          scopedSlots: { customRender: 'action' }
         }
       ],
       url: {
         list: '/projectRecord/projectRecord/list',
         delete: '/projectRecord/projectRecord/delete',
         deleteBatch: '/projectRecord/projectRecord/deleteBatch',
-        customerListByMainId: '/repaymentRecord/repaymentRecord/inlineList'
+        customerListByMainId: '/repaymentRecord/repaymentRecord/inlineList',
+        breakUpDown: '/projectRecord/projectRecord/breakUpDown'
       }
     }
   },
@@ -256,6 +258,33 @@ export default {
           }
         })
       }
+    },
+    upAndDown(pid) {
+      const that = this
+      that.confirmLoading = true
+      let httpurl = this.url.breakUpDown
+      let method = 'post'
+
+      let data = {
+        id: pid
+      }
+
+      let formData = Object.assign(data)
+      //时间格式化
+
+      httpAction(httpurl, formData , method)
+        .then(res => {
+          if (res.success) {
+            that.$message.success(res.message)  
+            that.$emit('ok')
+          } else {
+            that.$message.warning(res.message)
+          }
+        })
+        .finally(() => {
+          that.confirmLoading = false
+          this.loadData();
+        })
     }
   }
 }
